@@ -62,9 +62,10 @@ class QlooService {
   async search(query: string, categories?: string[]): Promise<QlooApiResponse> {
     const params: Record<string, any> = { query };
     if (categories && categories.length > 0) {
-      params.categories = categories;
+      // Convert categories to filter format for insights endpoint
+      params['filter.type'] = categories.map(cat => `urn:entity:${cat}`).join(',');
     }
-    return this.makeRequest('search', params);
+    return this.makeRequest('insights', params);
   }
 
   async getRecommendations(sample: string[], categories?: string[]): Promise<QlooApiResponse> {

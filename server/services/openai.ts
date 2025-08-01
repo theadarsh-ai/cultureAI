@@ -20,31 +20,30 @@ export interface CulturalInsight {
 
 export async function generateCulturalInsights(data: CulturalAnalysisRequest): Promise<CulturalInsight[]> {
   try {
+    // Reduce prompt size to avoid rate limits
+    const preferenceSummary = Object.entries(data.preferences)
+      .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+      .join('; ');
+    
     const prompt = `
-    As a cultural intelligence expert, analyze the following user preferences and provide deep cultural insights.
+    Analyze these cultural preferences and provide insights in JSON format:
     
-    User Preferences: ${JSON.stringify(data.preferences)}
-    ${data.qlooData ? `Qloo Cultural Data: ${JSON.stringify(data.qlooData)}` : ''}
+    Preferences: ${preferenceSummary}
     
-    Provide a comprehensive cultural analysis in JSON format with the following structure:
+    Return JSON with this structure:
     {
       "insights": [
         {
-          "category": "music|food|travel|art|lifestyle",
-          "insight": "detailed cultural insight explaining patterns and connections",
-          "culturalConnections": ["cultural region/tradition names"],
-          "recommendedExperiences": ["specific experience recommendations"],
+          "category": "music|food|travel",
+          "insight": "cultural insight about patterns and connections",
+          "culturalConnections": ["region/tradition names"],
+          "recommendedExperiences": ["specific recommendations"],
           "confidence": 0.85
         }
       ]
     }
     
-    Focus on:
-    1. Cross-cultural patterns and connections
-    2. Historical and social context
-    3. Geographic cultural affinities
-    4. Lifestyle and values alignment
-    5. Authentic cultural experiences
+    Focus on cross-cultural patterns, geographic affinities, and authentic experiences.
     `;
 
     const response = await openai.chat.completions.create({

@@ -220,9 +220,63 @@ class QlooService {
         }
       }
 
+      // For now, return search results without insights since entity IDs are incompatible
+      const searchResults = [];
+      
+      if (preferences.music && preferences.music.length > 0) {
+        for (const genre of preferences.music.slice(0, 2)) {
+          try {
+            const searchResult = await this.search(genre);
+            if (searchResult.results && searchResult.results.length > 0) {
+              searchResults.push({
+                category: 'music',
+                query: genre,
+                entities: searchResult.results.slice(0, 5)
+              });
+            }
+          } catch (error) {
+            console.log(`Music search error for ${genre}:`, error);
+          }
+        }
+      }
+
+      if (preferences.food && preferences.food.length > 0) {
+        for (const cuisine of preferences.food.slice(0, 2)) {
+          try {
+            const searchResult = await this.search(cuisine);
+            if (searchResult.results && searchResult.results.length > 0) {
+              searchResults.push({
+                category: 'food',
+                query: cuisine,
+                entities: searchResult.results.slice(0, 5)
+              });
+            }
+          } catch (error) {
+            console.log(`Food search error for ${cuisine}:`, error);
+          }
+        }
+      }
+
+      if (preferences.travel && preferences.travel.length > 0) {
+        for (const destination of preferences.travel.slice(0, 2)) {
+          try {
+            const searchResult = await this.search(destination);
+            if (searchResult.results && searchResult.results.length > 0) {
+              searchResults.push({
+                category: 'travel',
+                query: destination,
+                entities: searchResult.results.slice(0, 5)
+              });
+            }
+          } catch (error) {
+            console.log(`Travel search error for ${destination}:`, error);
+          }
+        }
+      }
+
       return {
-        culturalAffinities: insights,
-        totalEntities: insights.reduce((sum, insight) => sum + (insight.searchEntities?.length || 0), 0)
+        culturalAffinities: searchResults,
+        totalEntities: searchResults.reduce((sum, result) => sum + (result.entities?.length || 0), 0)
       };
     } catch (error) {
       console.error("Error getting cultural affinities:", error);

@@ -1,9 +1,7 @@
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 
-// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_ENV_VAR || ""
-});
+// Using Gemini for cultural insights generation
+const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export interface CulturalAnalysisRequest {
   preferences: Record<string, any>;
@@ -25,8 +23,9 @@ export async function generateCulturalInsights(data: CulturalAnalysisRequest): P
       .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
       .join('; ');
     
-    const prompt = `
-    Analyze these cultural preferences and provide insights in JSON format:
+    const systemPrompt = `You are a world-renowned cultural anthropologist and AI assistant specializing in cross-cultural analysis and personalized cultural recommendations. Provide thoughtful, accurate insights based on cultural data patterns.`;
+    
+    const prompt = `Analyze these cultural preferences and provide insights in JSON format:
     
     Preferences: ${preferenceSummary}
     
@@ -43,38 +42,55 @@ export async function generateCulturalInsights(data: CulturalAnalysisRequest): P
       ]
     }
     
-    Focus on cross-cultural patterns, geographic affinities, and authentic experiences.
-    `;
+    Focus on cross-cultural patterns, geographic affinities, and authentic experiences.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are a world-renowned cultural anthropologist and AI assistant specializing in cross-cultural analysis and personalized cultural recommendations. Provide thoughtful, accurate insights based on cultural data patterns."
-        },
-        {
-          role: "user",
-          content: prompt
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-pro",
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "object",
+          properties: {
+            insights: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  category: { type: "string" },
+                  insight: { type: "string" },
+                  culturalConnections: { type: "array", items: { type: "string" } },
+                  recommendedExperiences: { type: "array", items: { type: "string" } },
+                  confidence: { type: "number" }
+                },
+                required: ["category", "insight", "culturalConnections", "recommendedExperiences", "confidence"]
+              }
+            }
+          },
+          required: ["insights"]
         }
-      ],
-      response_format: { type: "json_object" },
-      max_tokens: 2000,
-      temperature: 0.7
+      },
+      contents: prompt
     });
 
-    const result = JSON.parse(response.choices[0].message.content || "{}");
-    return result.insights || [];
+    const rawJson = response.text;
+    if (rawJson) {
+      const result = JSON.parse(rawJson);
+      return result.insights || [];
+    } else {
+      throw new Error("Empty response from Gemini model");
+    }
   } catch (error) {
-    console.error("OpenAI API error:", error);
+    console.error("Gemini API error:", error);
     throw new Error("Failed to generate cultural insights");
   }
 }
 
 export async function generateCulturalStory(preferences: Record<string, any>, insights: CulturalInsight[]): Promise<string> {
   try {
-    const prompt = `
-    Create a compelling, personalized cultural narrative based on these preferences and insights:
+    const systemPrompt = "You are a master storyteller and cultural guide who creates personalized cultural narratives that help people understand their place in the global cultural landscape.";
+    
+    const prompt = `Create a compelling, personalized cultural narrative based on these preferences and insights:
     
     Preferences: ${JSON.stringify(preferences)}
     Cultural Insights: ${JSON.stringify(insights)}
@@ -85,36 +101,28 @@ export async function generateCulturalStory(preferences: Record<string, any>, in
     3. Suggests a cultural journey or path of discovery
     4. Is engaging, personal, and inspiring
     
-    Write in second person ("Your taste profile reveals...") and make it feel like a personalized cultural reading.
-    `;
+    Write in second person ("Your taste profile reveals...") and make it feel like a personalized cultural reading.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are a master storyteller and cultural guide who creates personalized cultural narratives that help people understand their place in the global cultural landscape."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      max_tokens: 800,
-      temperature: 0.8
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: systemPrompt,
+      },
+      contents: prompt
     });
 
-    return response.choices[0].message.content || "";
+    return response.text || "";
   } catch (error) {
-    console.error("OpenAI story generation error:", error);
+    console.error("Gemini story generation error:", error);
     throw new Error("Failed to generate cultural story");
   }
 }
 
 export async function enhanceRecommendation(recommendation: any, userContext: Record<string, any>): Promise<string> {
   try {
-    const prompt = `
-    Enhance this cultural recommendation with personal context and deeper insights:
+    const systemPrompt = "You are a personalized cultural concierge who enhances recommendations with meaningful, personal context.";
+    
+    const prompt = `Enhance this cultural recommendation with personal context and deeper insights:
     
     Recommendation: ${JSON.stringify(recommendation)}
     User Context: ${JSON.stringify(userContext)}
@@ -124,28 +132,19 @@ export async function enhanceRecommendation(recommendation: any, userContext: Re
     2. What unique cultural value they'll gain from this experience
     3. How it connects to their broader cultural journey
     
-    Be specific, personal, and culturally insightful.
-    `;
+    Be specific, personal, and culturally insightful.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are a personalized cultural concierge who enhances recommendations with meaningful, personal context."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      max_tokens: 200,
-      temperature: 0.7
+    const response = await genai.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: systemPrompt,
+      },
+      contents: prompt
     });
 
-    return response.choices[0].message.content || "";
+    return response.text || "";
   } catch (error) {
-    console.error("OpenAI enhancement error:", error);
+    console.error("Gemini enhancement error:", error);
     return "";
   }
 }

@@ -9,6 +9,15 @@ import { z } from "zod";
 export async function registerRoutes(app: Express): Promise<Server> {
   
   // User routes
+  app.get("/api/users", async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  });
+
   app.post("/api/users", async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
@@ -32,6 +41,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Cultural Profile routes
+  app.get("/api/cultural-profiles", async (req, res) => {
+    try {
+      const profiles = await storage.getAllCulturalProfiles();
+      res.json(profiles);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch cultural profiles" });
+    }
+  });
+
   app.post("/api/cultural-profiles", async (req, res) => {
     try {
       const profileData = insertCulturalProfileSchema.parse(req.body);

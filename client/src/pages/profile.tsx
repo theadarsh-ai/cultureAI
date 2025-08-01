@@ -13,15 +13,14 @@ import { Badge } from "@/components/ui/badge";
 import { User, Brain, Compass, Globe, TrendingUp, ArrowRight } from "lucide-react";
 
 export default function Profile() {
-  const [selectedUserId, setSelectedUserId] = useState<string>('demo-user');
-  
-  // For demo purposes, we'll create a sample user profile
-  // In a real app, this would come from authentication
-  const { data: profile, isLoading } = useQuery({
-    queryKey: ['/api/cultural-profiles/user', selectedUserId],
+  // Get all cultural profiles to find the most recent one
+  const { data: profiles, isLoading } = useQuery({
+    queryKey: ['/api/cultural-profiles'],
     retry: false,
   });
 
+  // Get the most recent profile (the one the user just completed)
+  const profile = profiles && profiles.length > 0 ? profiles[profiles.length - 1] : null;
   const profileId = profile && profile.id ? profile.id : null;
 
   // Demo mode when no profile exists

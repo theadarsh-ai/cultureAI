@@ -14,11 +14,13 @@ import { randomUUID } from "crypto";
 
 export interface IStorage {
   // Users
+  getAllUsers(): Promise<User[]>;
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
   // Cultural Profiles
+  getAllCulturalProfiles(): Promise<CulturalProfile[]>;
   getCulturalProfile(userId: string): Promise<CulturalProfile | undefined>;
   getCulturalProfileById(id: string): Promise<CulturalProfile | undefined>;
   createCulturalProfile(profile: InsertCulturalProfile): Promise<CulturalProfile>;
@@ -53,6 +55,10 @@ export class MemStorage implements IStorage {
     this.questionnaireResponses = new Map();
   }
 
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values());
+  }
+
   async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
   }
@@ -70,6 +76,10 @@ export class MemStorage implements IStorage {
     };
     this.users.set(id, user);
     return user;
+  }
+
+  async getAllCulturalProfiles(): Promise<CulturalProfile[]> {
+    return Array.from(this.culturalProfiles.values());
   }
 
   async getCulturalProfile(userId: string): Promise<CulturalProfile | undefined> {

@@ -14,17 +14,26 @@ import { User, Brain, Compass, Globe, TrendingUp, ArrowRight } from "lucide-reac
 
 export default function Profile() {
   // Get all cultural profiles to find the most recent one
-  const { data: profiles, isLoading } = useQuery<any[]>({
+  const { data: profiles, isLoading, error } = useQuery<any[]>({
     queryKey: ['/api/cultural-profiles'],
     retry: false,
   });
+
+  // Debug logging
+  console.log('Profiles data:', profiles);
+  console.log('Is loading:', isLoading);
+  console.log('Error:', error);
 
   // Get the most recent profile (the one the user just completed)
   const profile = Array.isArray(profiles) && profiles.length > 0 ? profiles[profiles.length - 1] : null;
   const profileId = profile?.id || null;
 
+  console.log('Selected profile:', profile);
+  console.log('Profile ID:', profileId);
+
   // Demo mode when no profile exists
   const isDemoMode = !profile || !profileId;
+  console.log('Demo mode:', isDemoMode);
 
   if (isLoading) {
     return (

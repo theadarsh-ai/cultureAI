@@ -60,25 +60,8 @@ class QlooService {
   }
 
   async search(query: string, categories?: string[]): Promise<QlooApiResponse> {
-    // Use the search endpoint to find entities first
+    // Try search endpoint without types parameter first
     const params: Record<string, any> = { q: query };
-    
-    if (categories && categories.length > 0) {
-      // Map categories to search types
-      const typeMap: Record<string, string> = {
-        'music': 'Artist',
-        'restaurants': 'Place',
-        'food': 'Place', 
-        'travel': 'Destination',
-        'places': 'Destination',
-        'movies': 'Movie',
-        'tv': 'TvShow',
-        'books': 'Book'
-      };
-      
-      const searchType = typeMap[categories[0]] || 'Place';
-      params['types'] = searchType;
-    }
     
     return this.makeRequest('search', params);
   }
@@ -127,74 +110,69 @@ class QlooService {
 
   async getCulturalAffinities(preferences: Record<string, any>): Promise<any> {
     try {
-      // Convert user preferences to Qloo queries
-      const searches = [];
+      // Try a simpler approach using insights API with location queries
+      const insights = [];
       
       if (preferences.music && preferences.music.length > 0) {
-        for (const genre of preferences.music.slice(0, 3)) {
-          const searchResult = await this.search(genre, ['music']);
-          if (searchResult.results && searchResult.results.length > 0) {
-            // Get entity IDs from search results
-            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
-            
-            if (entityIds.length > 0) {
-              // Get insights using the entity IDs
-              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:artist');
-              
-              searches.push({
-                category: 'music',
-                query: genre,
-                entities: searchResult.results.slice(0, 5),
-                insights: insightsResult.results || []
-              });
-            }
+        try {
+          const params = {
+            'filter.type': 'urn:entity:artist',
+            'take': 10
+          };
+          const result = await this.makeRequest('v2/insights', params);
+          if (result.results) {
+            insights.push({
+              category: 'music',
+              query: preferences.music.join(', '),
+              results: result.results
+            });
           }
+        } catch (error) {
+          console.log('Music insights error:', error);
         }
       }
 
       if (preferences.food && preferences.food.length > 0) {
-        for (const cuisine of preferences.food.slice(0, 3)) {
-          const searchResult = await this.search(cuisine, ['restaurants', 'food']);
-          if (searchResult.results && searchResult.results.length > 0) {
-            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
-            
-            if (entityIds.length > 0) {
-              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:place');
-              
-              searches.push({
-                category: 'food',
-                query: cuisine,
-                entities: searchResult.results.slice(0, 5),
-                insights: insightsResult.results || []
-              });
-            }
+        try {
+          const params = {
+            'filter.type': 'urn:entity:place',
+            'take': 10
+          };
+          const result = await this.makeRequest('v2/insights', params);
+          if (result.results) {
+            insights.push({
+              category: 'food',
+              query: preferences.food.join(', '),
+              results: result.results
+            });
           }
+        } catch (error) {
+          console.log('Food insights error:', error);
         }
       }
 
       if (preferences.travel && preferences.travel.length > 0) {
-        for (const destination of preferences.travel.slice(0, 3)) {
-          const searchResult = await this.search(destination, ['travel', 'places']);
-          if (searchResult.results && searchResult.results.length > 0) {
-            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
-            
-            if (entityIds.length > 0) {
-              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:destination');
-              
-              searches.push({
-                category: 'travel',
-                query: destination,
-                entities: searchResult.results.slice(0, 5),
-                insights: insightsResult.results || []
-              });
-            }
+        try {
+          const params = {
+            'filter.type': 'urn:entity:destination',
+            'take': 10
+          };
+          const result = await this.makeRequest('v2/insights', params);
+          if (result.results) {
+            insights.push({
+              category: 'travel',
+              query: preferences.travel.join(', '),
+              results: result.results
+            });
           }
+        } catch (error) {
+          console.log('Travel insights error:', error);
         }
       }
 
       return {
-        culturalAffinities: searches,
-        totalEntities: searches.reduce((sum, search) => sum + search.entities.length, 0)
+        culturalAffinities: insights,
+        totalEntities: insights.reduce((sum, insight) => sum + (insight.results?.length || 0), 0)
       };
     } catch (error) {
       console.error("Error getting cultural affinities:", error);

@@ -197,11 +197,14 @@ export default function QuestionnaireForm({ profileId, onComplete }: Questionnai
             </h3>
             <p className="text-gray-600 mb-6">{currentQuestion.description}</p>
             
+            {/* Debug emoji test */}
+            <div className="mb-4 p-2 bg-yellow-100 text-sm">
+              Debug: 🥁 🎷 💃 🌟 🎼 🌴 🍝 🍣 🍛 🌮 🍜 🥐
+            </div>
+            
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {currentQuestion.options.map((option) => {
                 const isSelected = responses[currentQuestion.id]?.includes(option.id) || false;
-                console.log('Rendering option:', option.label, 'icon:', option.icon);
-                
                 return (
                   <button
                     key={option.id}
@@ -213,7 +216,7 @@ export default function QuestionnaireForm({ profileId, onComplete }: Questionnai
                     }`}
                   >
                     <div className={`w-12 h-12 bg-${option.color}/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-${option.color}/30 transition-colors`}>
-                      <span className="text-2xl leading-none" style={{fontFamily: 'Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif'}}>{option.icon}</span>
+                      <span className="text-3xl select-none">{option.icon}</span>
                     </div>
                     <h4 className="font-semibold text-cultural-charcoal mb-2">{option.label}</h4>
                     <p className="text-sm text-gray-500">{option.description}</p>

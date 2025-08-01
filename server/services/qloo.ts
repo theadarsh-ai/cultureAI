@@ -60,8 +60,8 @@ class QlooService {
   }
 
   async search(query: string, categories?: string[]): Promise<QlooApiResponse> {
-    // Try search endpoint without types parameter first
-    const params: Record<string, any> = { q: query };
+    // Use correct parameter name 'query' instead of 'q'
+    const params: Record<string, any> = { query: query };
     
     return this.makeRequest('search', params);
   }

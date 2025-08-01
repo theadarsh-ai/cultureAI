@@ -60,24 +60,67 @@ class QlooService {
   }
 
   async search(query: string, categories?: string[]): Promise<QlooApiResponse> {
-    const params: Record<string, any> = { query };
+    // Use the insights endpoint with proper filter.type
+    const params: Record<string, any> = {};
+    
     if (categories && categories.length > 0) {
-      // Convert categories to filter format for insights endpoint
-      params['filter.type'] = categories.map(cat => `urn:entity:${cat}`).join(',');
+      // Map common categories to proper URN format
+      const categoryMap: Record<string, string> = {
+        'music': 'urn:entity:artist',
+        'restaurants': 'urn:entity:place',
+        'food': 'urn:entity:place', 
+        'travel': 'urn:entity:destination',
+        'places': 'urn:entity:destination',
+        'movies': 'urn:entity:movie',
+        'tv': 'urn:entity:tv_show',
+        'books': 'urn:entity:book'
+      };
+      
+      const mappedCategory = categoryMap[categories[0]] || 'urn:entity:place';
+      params['filter.type'] = mappedCategory;
+    } else {
+      params['filter.type'] = 'urn:entity:place'; // Default to places
     }
-    return this.makeRequest('insights', params);
+    
+    // Add the query as a text signal if provided
+    if (query) {
+      params['signal.text'] = query;
+    }
+    
+    return this.makeRequest('v2/insights', params);
   }
 
   async getRecommendations(sample: string[], categories?: string[]): Promise<QlooApiResponse> {
-    const params: Record<string, any> = { sample };
+    const params: Record<string, any> = {};
+    
     if (categories && categories.length > 0) {
-      params.categories = categories;
+      const categoryMap: Record<string, string> = {
+        'music': 'urn:entity:artist',
+        'restaurants': 'urn:entity:place',
+        'food': 'urn:entity:place', 
+        'travel': 'urn:entity:destination',
+        'places': 'urn:entity:destination',
+        'movies': 'urn:entity:movie',
+        'tv': 'urn:entity:tv_show',
+        'books': 'urn:entity:book'
+      };
+      
+      const mappedCategory = categoryMap[categories[0]] || 'urn:entity:place';
+      params['filter.type'] = mappedCategory;
+    } else {
+      params['filter.type'] = 'urn:entity:place';
     }
-    return this.makeRequest('recs', params);
+    
+    // Use sample entities as signal inputs
+    if (sample && sample.length > 0) {
+      params['signal.interests.entities'] = sample.join(',');
+    }
+    
+    return this.makeRequest('v2/insights', params);
   }
 
   async getInsights(request: QlooInsightsRequest): Promise<QlooApiResponse> {
-    return this.makeRequest('insights', request);
+    return this.makeRequest('v2/insights', request);
   }
 
   async getCulturalAffinities(preferences: Record<string, any>): Promise<any> {

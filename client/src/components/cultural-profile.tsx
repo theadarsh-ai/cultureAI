@@ -38,6 +38,15 @@ export default function CulturalProfileComponent({ profileId }: CulturalProfileP
   const preferences = profile.preferences as Record<string, string[]>;
   const culturalDNA = profile.culturalDNA as any;
 
+  // Get insights count
+  const { data: insights } = useQuery({
+    queryKey: ['/api/cultural-insights', profileId],
+    enabled: !!profileId,
+  });
+
+  const insightsCount = insights?.length || 0;
+  const preferencesCount = Object.keys(preferences).length;
+
   return (
     <div className="space-y-6">
       {/* Profile Overview */}
@@ -50,34 +59,32 @@ export default function CulturalProfileComponent({ profileId }: CulturalProfileP
             <div className="flex items-center space-x-4">
               <div className="text-right">
                 <p className="text-sm text-gray-600">Profile Completion</p>
-                <p className="font-semibold text-cultural-teal">{profile.completionPercentage}%</p>
+                <p className="font-semibold text-cultural-teal">{profile.completionPercentage || 100}%</p>
               </div>
               <div className="w-16">
-                <Progress value={profile.completionPercentage || 0} className="h-2" />
+                <Progress value={profile.completionPercentage || 100} className="h-2" />
               </div>
             </div>
           </div>
 
           {/* Cultural DNA Summary */}
-          {culturalDNA?.totalEntities && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
-                <Globe className="mx-auto mb-2 text-cultural-teal" size={24} />
-                <p className="font-semibold text-cultural-charcoal">{culturalDNA.totalEntities}</p>
-                <p className="text-sm text-gray-600">Cultural Entities</p>
-              </div>
-              <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
-                <Lightbulb className="mx-auto mb-2 text-cultural-amber" size={24} />
-                <p className="font-semibold text-cultural-charcoal">{culturalDNA.insights?.length || 0}</p>
-                <p className="text-sm text-gray-600">AI Insights</p>
-              </div>
-              <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
-                <TrendingUp className="mx-auto mb-2 text-cultural-emerald" size={24} />
-                <p className="font-semibold text-cultural-charcoal">{culturalDNA.qlooAffinities?.length || 0}</p>
-                <p className="text-sm text-gray-600">Cultural Affinities</p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
+              <Globe className="mx-auto mb-2 text-cultural-teal" size={24} />
+              <p className="font-semibold text-cultural-charcoal">{preferencesCount}</p>
+              <p className="text-sm text-gray-600">Cultural Categories</p>
             </div>
-          )}
+            <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
+              <Lightbulb className="mx-auto mb-2 text-cultural-amber" size={24} />
+              <p className="font-semibold text-cultural-charcoal">{insightsCount}</p>
+              <p className="text-sm text-gray-600">AI Insights</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-xl border border-gray-100">
+              <TrendingUp className="mx-auto mb-2 text-cultural-emerald" size={24} />
+              <p className="font-semibold text-cultural-charcoal">{Object.values(preferences).flat().length}</p>
+              <p className="text-sm text-gray-600">Cultural Preferences</p>
+            </div>
+          </div>
 
           {/* Preferences Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

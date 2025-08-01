@@ -21,7 +21,7 @@ interface Question {
     id: string;
     label: string;
     description: string;
-    emoji: string;
+    icon: string;
     color: string;
   }>;
 }
@@ -33,12 +33,12 @@ const questions: Question[] = [
     description: 'Select the styles that move your soul',
     type: 'multiple_choice',
     options: [
-      { id: 'afrobeat', label: 'Afrobeat', description: 'Rhythmic, percussion-driven', emoji: '🥁', color: 'cultural-amber' },
-      { id: 'flamenco', label: 'Flamenco', description: 'Passionate, expressive', emoji: '💃', color: 'cultural-terracotta' },
-      { id: 'jazz', label: 'Jazz', description: 'Improvisational, soulful', emoji: '🎷', color: 'cultural-purple' },
-      { id: 'kpop', label: 'K-Pop', description: 'Modern, energetic', emoji: '🌟', color: 'cultural-emerald' },
-      { id: 'classical', label: 'Classical', description: 'Timeless, sophisticated', emoji: '🎼', color: 'cultural-burgundy' },
-      { id: 'reggae', label: 'Reggae', description: 'Laid-back, conscious', emoji: '🌴', color: 'cultural-teal' },
+      { id: 'afrobeat', label: 'Afrobeat', description: 'Rhythmic, percussion-driven', icon: '♪', color: 'cultural-amber' },
+      { id: 'flamenco', label: 'Flamenco', description: 'Passionate, expressive', icon: '♫', color: 'cultural-terracotta' },
+      { id: 'jazz', label: 'Jazz', description: 'Improvisational, soulful', icon: '♬', color: 'cultural-purple' },
+      { id: 'kpop', label: 'K-Pop', description: 'Modern, energetic', icon: '★', color: 'cultural-emerald' },
+      { id: 'classical', label: 'Classical', description: 'Timeless, sophisticated', icon: '♫', color: 'cultural-burgundy' },
+      { id: 'reggae', label: 'Reggae', description: 'Laid-back, conscious', icon: '♪', color: 'cultural-teal' },
     ]
   },
   {
@@ -47,12 +47,12 @@ const questions: Question[] = [
     description: 'Choose the flavors that speak to you',
     type: 'multiple_choice',
     options: [
-      { id: 'italian', label: 'Italian', description: 'Pasta, fresh ingredients', emoji: '🍝', color: 'cultural-terracotta' },
-      { id: 'japanese', label: 'Japanese', description: 'Sushi, umami flavors', emoji: '🍣', color: 'cultural-burgundy' },
-      { id: 'indian', label: 'Indian', description: 'Spices, complex flavors', emoji: '🍛', color: 'cultural-amber' },
-      { id: 'mexican', label: 'Mexican', description: 'Bold, vibrant tastes', emoji: '🌮', color: 'cultural-emerald' },
-      { id: 'thai', label: 'Thai', description: 'Sweet, sour, spicy', emoji: '🍜', color: 'cultural-purple' },
-      { id: 'french', label: 'French', description: 'Refined, classical', emoji: '🥐', color: 'cultural-teal' },
+      { id: 'italian', label: 'Italian', description: 'Pasta, fresh ingredients', icon: '🍝', color: 'cultural-terracotta' },
+      { id: 'japanese', label: 'Japanese', description: 'Sushi, umami flavors', icon: '🍱', color: 'cultural-burgundy' },
+      { id: 'indian', label: 'Indian', description: 'Spices, complex flavors', icon: '🍛', color: 'cultural-amber' },
+      { id: 'mexican', label: 'Mexican', description: 'Bold, vibrant tastes', icon: '🌶️', color: 'cultural-emerald' },
+      { id: 'thai', label: 'Thai', description: 'Sweet, sour, spicy', icon: '🥗', color: 'cultural-purple' },
+      { id: 'french', label: 'French', description: 'Refined, classical', icon: '🥖', color: 'cultural-teal' },
     ]
   },
   {
@@ -61,12 +61,12 @@ const questions: Question[] = [
     description: 'Select destinations that call to your wanderlust',
     type: 'multiple_choice',
     options: [
-      { id: 'tokyo', label: 'Tokyo', description: 'Modern culture meets tradition', emoji: '🏯', color: 'cultural-burgundy' },
-      { id: 'istanbul', label: 'Istanbul', description: 'East meets West', emoji: '🕌', color: 'cultural-terracotta' },
-      { id: 'barcelona', label: 'Barcelona', description: 'Art, architecture, passion', emoji: '🏛️', color: 'cultural-amber' },
-      { id: 'marrakech', label: 'Marrakech', description: 'Exotic markets, traditions', emoji: '🐪', color: 'cultural-emerald' },
-      { id: 'reykjavik', label: 'Reykjavik', description: 'Nordic minimalism, nature', emoji: '🏔️', color: 'cultural-teal' },
-      { id: 'rio', label: 'Rio de Janeiro', description: 'Vibrant culture, beaches', emoji: '🏖️', color: 'cultural-purple' },
+      { id: 'tokyo', label: 'Tokyo', description: 'Modern culture meets tradition', icon: '🌸', color: 'cultural-burgundy' },
+      { id: 'istanbul', label: 'Istanbul', description: 'East meets West', icon: '🌉', color: 'cultural-terracotta' },
+      { id: 'barcelona', label: 'Barcelona', description: 'Art, architecture, passion', icon: '🏛️', color: 'cultural-amber' },
+      { id: 'marrakech', label: 'Marrakech', description: 'Exotic markets, traditions', icon: '🏺', color: 'cultural-emerald' },
+      { id: 'reykjavik', label: 'Reykjavik', description: 'Nordic minimalism, nature', icon: '❄️', color: 'cultural-teal' },
+      { id: 'rio', label: 'Rio de Janeiro', description: 'Vibrant culture, beaches', icon: '🎭', color: 'cultural-purple' },
     ]
   },
   {
@@ -75,12 +75,12 @@ const questions: Question[] = [
     description: 'Choose the visual expressions that move you',
     type: 'multiple_choice',
     options: [
-      { id: 'impressionist', label: 'Impressionist', description: 'Light, color, emotion', emoji: '🌅', color: 'cultural-amber' },
-      { id: 'contemporary', label: 'Contemporary', description: 'Modern, experimental', emoji: '🎨', color: 'cultural-purple' },
-      { id: 'traditional', label: 'Traditional', description: 'Cultural heritage, crafts', emoji: '🏺', color: 'cultural-terracotta' },
-      { id: 'street-art', label: 'Street Art', description: 'Urban, expressive', emoji: '🧱', color: 'cultural-emerald' },
-      { id: 'minimalist', label: 'Minimalist', description: 'Clean, simple lines', emoji: '⚪', color: 'cultural-teal' },
-      { id: 'abstract', label: 'Abstract', description: 'Non-representational', emoji: '🔶', color: 'cultural-burgundy' },
+      { id: 'impressionist', label: 'Impressionist', description: 'Light, color, emotion', icon: '🌅', color: 'cultural-amber' },
+      { id: 'contemporary', label: 'Contemporary', description: 'Modern, experimental', icon: '🎨', color: 'cultural-purple' },
+      { id: 'traditional', label: 'Traditional', description: 'Cultural heritage, crafts', icon: '🏺', color: 'cultural-terracotta' },
+      { id: 'street-art', label: 'Street Art', description: 'Urban, expressive', icon: '🎭', color: 'cultural-emerald' },
+      { id: 'minimalist', label: 'Minimalist', description: 'Clean, simple lines', icon: '⚪', color: 'cultural-teal' },
+      { id: 'abstract', label: 'Abstract', description: 'Non-representational', icon: '🔶', color: 'cultural-burgundy' },
     ]
   },
   {
@@ -89,12 +89,12 @@ const questions: Question[] = [
     description: 'Select the approaches that resonate with you',
     type: 'multiple_choice',
     options: [
-      { id: 'social', label: 'Social & Communal', description: 'Shared experiences, gatherings', emoji: '👥', color: 'cultural-terracotta' },
-      { id: 'mindful', label: 'Mindful & Intentional', description: 'Conscious living, balance', emoji: '🧘', color: 'cultural-emerald' },
-      { id: 'adventurous', label: 'Adventurous & Bold', description: 'New experiences, risks', emoji: '⚡', color: 'cultural-amber' },
-      { id: 'artistic', label: 'Creative & Artistic', description: 'Expression, aesthetics', emoji: '✨', color: 'cultural-purple' },
-      { id: 'intellectual', label: 'Intellectual & Curious', description: 'Learning, exploration', emoji: '📚', color: 'cultural-teal' },
-      { id: 'traditional', label: 'Traditional & Rooted', description: 'Heritage, stability', emoji: '🏠', color: 'cultural-burgundy' },
+      { id: 'social', label: 'Social & Communal', description: 'Shared experiences, gatherings', icon: '🤝', color: 'cultural-terracotta' },
+      { id: 'mindful', label: 'Mindful & Intentional', description: 'Conscious living, balance', icon: '🧘', color: 'cultural-emerald' },
+      { id: 'adventurous', label: 'Adventurous & Bold', description: 'New experiences, risks', icon: '⚡', color: 'cultural-amber' },
+      { id: 'artistic', label: 'Creative & Artistic', description: 'Expression, aesthetics', icon: '✨', color: 'cultural-purple' },
+      { id: 'intellectual', label: 'Intellectual & Curious', description: 'Learning, exploration', icon: '📚', color: 'cultural-teal' },
+      { id: 'traditional', label: 'Traditional & Rooted', description: 'Heritage, stability', icon: '🏛️', color: 'cultural-burgundy' },
     ]
   }
 ];
@@ -211,7 +211,7 @@ export default function QuestionnaireForm({ profileId, onComplete }: Questionnai
                     }`}
                   >
                     <div className={`w-12 h-12 bg-${option.color}/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-${option.color}/30 transition-colors`}>
-                      <span className="text-2xl">{option.emoji}</span>
+                      <span className="text-2xl emoji">{option.icon}</span>
                     </div>
                     <h4 className="font-semibold text-cultural-charcoal mb-2">{option.label}</h4>
                     <p className="text-sm text-gray-500">{option.description}</p>

@@ -31,8 +31,8 @@ export default function Profile() {
   console.log('Selected profile:', profile);
   console.log('Profile ID:', profileId);
 
-  // Demo mode when no profile exists
-  const isDemoMode = !profile || !profileId;
+  // Demo mode when no profile exists - FORCE SHOW PROFILE FOR HACKATHON
+  const isDemoMode = false; // Always show profile interface for hackathon demo
   console.log('Demo mode:', isDemoMode);
 
   if (isLoading) {
@@ -265,7 +265,20 @@ export default function Profile() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-8">
-              {profileId && <CulturalProfileComponent profileId={profileId} />}
+              {profileId ? (
+                <CulturalProfileComponent profileId={profileId} />
+              ) : (
+                <div className="text-center py-12">
+                  <h3 className="text-xl font-semibold text-cultural-charcoal mb-4">
+                    Complete the questionnaire to see your cultural profile
+                  </h3>
+                  <Link href="/questionnaire">
+                    <Button className="bg-cultural-teal hover:bg-cultural-teal/90 text-white">
+                      Take Questionnaire
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="insights" className="space-y-8">
@@ -277,7 +290,20 @@ export default function Profile() {
                   Discover the deeper cultural stories behind your preferences through advanced AI analysis and cultural intelligence.
                 </p>
               </div>
-              {profileId && <AIInsights profileId={profileId} />}
+              {profileId ? (
+                <AIInsights profileId={profileId} />
+              ) : (
+                <div className="text-center py-12">
+                  <h3 className="text-xl font-semibold text-cultural-charcoal mb-4">
+                    Complete the questionnaire to see AI insights
+                  </h3>
+                  <Link href="/questionnaire">
+                    <Button className="bg-cultural-teal hover:bg-cultural-teal/90 text-white">
+                      Take Questionnaire
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="recommendations" className="space-y-8">
@@ -289,7 +315,20 @@ export default function Profile() {
                   Explore curated recommendations based on your unique cultural profile and AI-powered taste analysis.
                 </p>
               </div>
-              {profileId && <PersonalizedFeed profileId={profileId} />}
+              {profileId ? (
+                <PersonalizedFeed profileId={profileId} />
+              ) : (
+                <div className="text-center py-12">
+                  <h3 className="text-xl font-semibold text-cultural-charcoal mb-4">
+                    Complete the questionnaire to see personalized recommendations
+                  </h3>
+                  <Link href="/questionnaire">
+                    <Button className="bg-cultural-teal hover:bg-cultural-teal/90 text-white">
+                      Take Questionnaire
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="map" className="space-y-8">

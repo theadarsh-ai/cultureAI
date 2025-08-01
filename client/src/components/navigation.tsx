@@ -9,6 +9,7 @@ export default function Navigation() {
 
   const navLinks = [
     { href: "/", label: "Discover" },
+    { href: "/demo", label: "Live Demo" },
     { href: "/profile", label: "Profile" },
   ];
 

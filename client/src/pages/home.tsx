@@ -4,7 +4,7 @@ import WorldMap from "@/components/world-map";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Bot, Database, Globe, Shield, Brain, Network, Lightbulb, Users } from "lucide-react";
+import { Bot, Database, Globe, Shield, Brain, Network, Lightbulb, Users, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
@@ -36,11 +36,19 @@ export default function Home() {
                 <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
                   Our intelligent questionnaire analyzes your preferences across music, food, travel, art, and lifestyle to create your unique cultural DNA profile.
                 </p>
-                <Link href="/questionnaire">
-                  <Button className="bg-cultural-teal hover:bg-cultural-teal/90 text-white px-8 py-4 rounded-full font-semibold">
-                    Start Cultural Discovery
-                  </Button>
-                </Link>
+                <div className="flex justify-center space-x-4">
+                  <Link href="/questionnaire">
+                    <Button className="bg-cultural-teal hover:bg-cultural-teal/90 text-white px-8 py-4 rounded-full font-semibold">
+                      Start Cultural Discovery
+                    </Button>
+                  </Link>
+                  <Link href="/demo">
+                    <Button variant="outline" className="border-cultural-teal text-cultural-teal hover:bg-cultural-teal/10 px-8 py-4 rounded-full font-semibold">
+                      View Demo
+                      <Sparkles className="ml-2" size={16} />
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </div>

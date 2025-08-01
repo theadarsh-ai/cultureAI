@@ -130,6 +130,7 @@ class QlooService {
               if (entityIds.length > 0) {
                 console.log(`Using entity IDs for ${genre}:`, entityIds);
                 const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:artist');
+                console.log(`Insights result for ${genre}:`, insightsResult);
                 
                 if (insightsResult.results) {
                   insights.push({
@@ -138,6 +139,7 @@ class QlooService {
                     searchEntities: searchResult.results.slice(0, 5),
                     insights: insightsResult.results
                   });
+                  console.log(`Added music insights for ${genre}`);
                 }
               }
             }

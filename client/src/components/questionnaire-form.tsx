@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Music, Utensils, MapPin, Palette, Heart, Users } from "lucide-react";
 
 interface QuestionnaireFormProps {
   profileId: string;
@@ -21,24 +20,8 @@ interface Question {
     id: string;
     label: string;
     description: string;
-    icon: string;
     color: string;
   }>;
-}
-
-// Icon component using Lucide icons
-function IconComponent({ iconName, className }: { iconName: string; className?: string }) {
-  const iconMap: Record<string, any> = {
-    music: Music,
-    utensils: Utensils,
-    map: MapPin,
-    palette: Palette,
-    heart: Heart,
-    users: Users
-  };
-  
-  const IconElement = iconMap[iconName] || Music;
-  return <IconElement className={className} />;
 }
 
 const questions: Question[] = [
@@ -48,12 +31,12 @@ const questions: Question[] = [
     description: 'Select the styles that move your soul',
     type: 'multiple_choice',
     options: [
-      { id: 'afrobeat', label: 'Afrobeat', description: 'Rhythmic, percussion-driven', icon: 'music', color: 'cultural-amber' },
-      { id: 'flamenco', label: 'Flamenco', description: 'Passionate, expressive', icon: 'music', color: 'cultural-terracotta' },
-      { id: 'jazz', label: 'Jazz', description: 'Improvisational, soulful', icon: 'music', color: 'cultural-purple' },
-      { id: 'kpop', label: 'K-Pop', description: 'Modern, energetic', icon: 'music', color: 'cultural-emerald' },
-      { id: 'classical', label: 'Classical', description: 'Timeless, sophisticated', icon: 'music', color: 'cultural-burgundy' },
-      { id: 'reggae', label: 'Reggae', description: 'Laid-back, conscious', icon: 'music', color: 'cultural-teal' },
+      { id: 'afrobeat', label: 'Afrobeat', description: 'Rhythmic, percussion-driven', color: 'cultural-amber' },
+      { id: 'flamenco', label: 'Flamenco', description: 'Passionate, expressive', color: 'cultural-terracotta' },
+      { id: 'jazz', label: 'Jazz', description: 'Improvisational, soulful', color: 'cultural-purple' },
+      { id: 'kpop', label: 'K-Pop', description: 'Modern, energetic', color: 'cultural-emerald' },
+      { id: 'classical', label: 'Classical', description: 'Timeless, sophisticated', color: 'cultural-burgundy' },
+      { id: 'reggae', label: 'Reggae', description: 'Laid-back, conscious', color: 'cultural-teal' },
     ]
   },
   {
@@ -62,12 +45,12 @@ const questions: Question[] = [
     description: 'Choose the flavors that speak to you',
     type: 'multiple_choice',
     options: [
-      { id: 'italian', label: 'Italian', description: 'Pasta, fresh ingredients', icon: 'utensils', color: 'cultural-terracotta' },
-      { id: 'japanese', label: 'Japanese', description: 'Sushi, umami flavors', icon: 'utensils', color: 'cultural-burgundy' },
-      { id: 'indian', label: 'Indian', description: 'Spices, complex flavors', icon: 'utensils', color: 'cultural-amber' },
-      { id: 'mexican', label: 'Mexican', description: 'Bold, vibrant tastes', icon: 'utensils', color: 'cultural-emerald' },
-      { id: 'thai', label: 'Thai', description: 'Sweet, sour, spicy', icon: 'utensils', color: 'cultural-purple' },
-      { id: 'french', label: 'French', description: 'Refined, classical', icon: 'utensils', color: 'cultural-teal' },
+      { id: 'italian', label: 'Italian', description: 'Pasta, fresh ingredients', color: 'cultural-terracotta' },
+      { id: 'japanese', label: 'Japanese', description: 'Sushi, umami flavors', color: 'cultural-burgundy' },
+      { id: 'indian', label: 'Indian', description: 'Spices, complex flavors', color: 'cultural-amber' },
+      { id: 'mexican', label: 'Mexican', description: 'Bold, vibrant tastes', color: 'cultural-emerald' },
+      { id: 'thai', label: 'Thai', description: 'Sweet, sour, spicy', color: 'cultural-purple' },
+      { id: 'french', label: 'French', description: 'Refined, classical', color: 'cultural-teal' },
     ]
   },
   {
@@ -76,12 +59,12 @@ const questions: Question[] = [
     description: 'Select destinations that call to your wanderlust',
     type: 'multiple_choice',
     options: [
-      { id: 'tokyo', label: 'Tokyo', description: 'Modern culture meets tradition', icon: 'map', color: 'cultural-burgundy' },
-      { id: 'istanbul', label: 'Istanbul', description: 'East meets West', icon: 'map', color: 'cultural-terracotta' },
-      { id: 'barcelona', label: 'Barcelona', description: 'Art, architecture, passion', icon: 'map', color: 'cultural-amber' },
-      { id: 'marrakech', label: 'Marrakech', description: 'Exotic markets, traditions', icon: 'map', color: 'cultural-emerald' },
-      { id: 'reykjavik', label: 'Reykjavik', description: 'Nordic minimalism, nature', icon: 'map', color: 'cultural-teal' },
-      { id: 'rio', label: 'Rio de Janeiro', description: 'Vibrant culture, beaches', icon: 'map', color: 'cultural-purple' },
+      { id: 'tokyo', label: 'Tokyo', description: 'Modern culture meets tradition', color: 'cultural-burgundy' },
+      { id: 'istanbul', label: 'Istanbul', description: 'East meets West', color: 'cultural-terracotta' },
+      { id: 'barcelona', label: 'Barcelona', description: 'Art, architecture, passion', color: 'cultural-amber' },
+      { id: 'marrakech', label: 'Marrakech', description: 'Exotic markets, traditions', color: 'cultural-emerald' },
+      { id: 'reykjavik', label: 'Reykjavik', description: 'Nordic minimalism, nature', color: 'cultural-teal' },
+      { id: 'rio', label: 'Rio de Janeiro', description: 'Vibrant culture, beaches', color: 'cultural-purple' },
     ]
   },
   {
@@ -90,12 +73,12 @@ const questions: Question[] = [
     description: 'Choose the visual expressions that move you',
     type: 'multiple_choice',
     options: [
-      { id: 'impressionist', label: 'Impressionist', description: 'Light, color, emotion', icon: 'palette', color: 'cultural-amber' },
-      { id: 'contemporary', label: 'Contemporary', description: 'Modern, experimental', icon: 'palette', color: 'cultural-purple' },
-      { id: 'traditional', label: 'Traditional', description: 'Cultural heritage, crafts', icon: 'palette', color: 'cultural-terracotta' },
-      { id: 'street-art', label: 'Street Art', description: 'Urban, expressive', icon: 'palette', color: 'cultural-emerald' },
-      { id: 'minimalist', label: 'Minimalist', description: 'Clean, simple lines', icon: 'palette', color: 'cultural-teal' },
-      { id: 'abstract', label: 'Abstract', description: 'Non-representational', icon: 'palette', color: 'cultural-burgundy' },
+      { id: 'impressionist', label: 'Impressionist', description: 'Light, color, emotion', color: 'cultural-amber' },
+      { id: 'contemporary', label: 'Contemporary', description: 'Modern, experimental', color: 'cultural-purple' },
+      { id: 'traditional', label: 'Traditional', description: 'Cultural heritage, crafts', color: 'cultural-terracotta' },
+      { id: 'street-art', label: 'Street Art', description: 'Urban, expressive', color: 'cultural-emerald' },
+      { id: 'minimalist', label: 'Minimalist', description: 'Clean, simple lines', color: 'cultural-teal' },
+      { id: 'abstract', label: 'Abstract', description: 'Non-representational', color: 'cultural-burgundy' },
     ]
   },
   {
@@ -104,12 +87,12 @@ const questions: Question[] = [
     description: 'Select the approaches that resonate with you',
     type: 'multiple_choice',
     options: [
-      { id: 'social', label: 'Social & Communal', description: 'Shared experiences, gatherings', icon: 'users', color: 'cultural-terracotta' },
-      { id: 'mindful', label: 'Mindful & Intentional', description: 'Conscious living, balance', icon: 'heart', color: 'cultural-emerald' },
-      { id: 'adventurous', label: 'Adventurous & Bold', description: 'New experiences, risks', icon: 'map', color: 'cultural-amber' },
-      { id: 'artistic', label: 'Creative & Artistic', description: 'Expression, aesthetics', icon: 'palette', color: 'cultural-purple' },
-      { id: 'intellectual', label: 'Intellectual & Curious', description: 'Learning, exploration', icon: 'users', color: 'cultural-teal' },
-      { id: 'traditional', label: 'Traditional & Rooted', description: 'Heritage, stability', icon: 'heart', color: 'cultural-burgundy' },
+      { id: 'social', label: 'Social & Communal', description: 'Shared experiences, gatherings', color: 'cultural-terracotta' },
+      { id: 'mindful', label: 'Mindful & Intentional', description: 'Conscious living, balance', color: 'cultural-emerald' },
+      { id: 'adventurous', label: 'Adventurous & Bold', description: 'New experiences, risks', color: 'cultural-amber' },
+      { id: 'artistic', label: 'Creative & Artistic', description: 'Expression, aesthetics', color: 'cultural-purple' },
+      { id: 'intellectual', label: 'Intellectual & Curious', description: 'Learning, exploration', color: 'cultural-teal' },
+      { id: 'traditional', label: 'Traditional & Rooted', description: 'Heritage, stability', color: 'cultural-burgundy' },
     ]
   }
 ];
@@ -226,7 +209,7 @@ export default function QuestionnaireForm({ profileId, onComplete }: Questionnai
                     }`}
                   >
                     <div className={`w-12 h-12 bg-${option.color}/20 rounded-lg flex items-center justify-center mb-4 group-hover:bg-${option.color}/30 transition-colors`}>
-                      <IconComponent iconName={option.icon} className={`text-${option.color} w-6 h-6`} />
+                      <div className={`w-6 h-6 bg-${option.color} rounded-full`}></div>
                     </div>
                     <h4 className="font-semibold text-cultural-charcoal mb-2">{option.label}</h4>
                     <p className="text-sm text-gray-500">{option.description}</p>

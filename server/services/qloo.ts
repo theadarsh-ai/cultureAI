@@ -121,13 +121,14 @@ class QlooService {
             console.log(`Search result for ${genre}:`, searchResult);
             
             if (searchResult.results && searchResult.results.length > 0) {
-              // Get entity IDs from search results - use entity_id field
+              // Get entity IDs from search results - filter by artist types
               const entityIds = searchResult.results
-                .filter((r: any) => r.entity_id)
+                .filter((r: any) => r.entity_id && r.types && r.types.some((t: string) => t.toLowerCase().includes('artist') || t.toLowerCase().includes('music')))
                 .slice(0, 3)
                 .map((r: any) => r.entity_id);
               
-              console.log(`Extracted entity IDs for ${genre}:`, entityIds);
+              console.log(`Extracted artist entity IDs for ${genre}:`, entityIds);
+              console.log(`Available types in search results:`, searchResult.results.slice(0, 3).map((r: any) => ({ name: r.name, types: r.types })));
               
               if (entityIds.length > 0) {
                 console.log(`Using entity IDs for ${genre}:`, entityIds);
@@ -159,11 +160,12 @@ class QlooService {
             
             if (searchResult.results && searchResult.results.length > 0) {
               const entityIds = searchResult.results
-                .filter((r: any) => r.entity_id)
+                .filter((r: any) => r.entity_id && r.types && r.types.some((t: string) => t.toLowerCase().includes('place') || t.toLowerCase().includes('restaurant')))
                 .slice(0, 3)
                 .map((r: any) => r.entity_id);
               
-              console.log(`Extracted entity IDs for ${cuisine}:`, entityIds);
+              console.log(`Extracted place entity IDs for ${cuisine}:`, entityIds);
+              console.log(`Available types in search results:`, searchResult.results.slice(0, 3).map((r: any) => ({ name: r.name, types: r.types })));
               
               if (entityIds.length > 0) {
                 const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:place');
@@ -192,11 +194,12 @@ class QlooService {
             
             if (searchResult.results && searchResult.results.length > 0) {
               const entityIds = searchResult.results
-                .filter((r: any) => r.entity_id)
+                .filter((r: any) => r.entity_id && r.types && r.types.some((t: string) => t.toLowerCase().includes('destination') || t.toLowerCase().includes('place') || t.toLowerCase().includes('city')))
                 .slice(0, 3)
                 .map((r: any) => r.entity_id);
               
-              console.log(`Extracted entity IDs for ${destination}:`, entityIds);
+              console.log(`Extracted destination entity IDs for ${destination}:`, entityIds);
+              console.log(`Available types in search results:`, searchResult.results.slice(0, 3).map((r: any) => ({ name: r.name, types: r.types })));
               
               if (entityIds.length > 0) {
                 const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:destination');

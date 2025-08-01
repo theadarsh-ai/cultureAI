@@ -12,7 +12,7 @@ export interface QlooInsightsRequest {
 }
 
 class QlooService {
-  private baseUrl = "https://staging.api.qloo.com/v2";
+  private baseUrl = "https://hackathon.api.qloo.com/v2";
   private apiKey: string;
 
   constructor() {

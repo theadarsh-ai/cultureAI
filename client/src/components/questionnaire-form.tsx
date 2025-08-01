@@ -29,7 +29,7 @@ interface Question {
 const questions: Question[] = [
   {
     id: 'music-genres',
-    title: 'Which music genres resonate with you?',
+    title: 'Music Affinity',
     description: 'Select the styles that move your soul',
     type: 'multiple_choice',
     options: [
@@ -43,7 +43,7 @@ const questions: Question[] = [
   },
   {
     id: 'food-cuisines',
-    title: 'What cuisines excite your palate?',
+    title: 'Cuisine Profile',
     description: 'Choose the flavors that speak to you',
     type: 'multiple_choice',
     options: [
@@ -71,7 +71,7 @@ const questions: Question[] = [
   },
   {
     id: 'art-styles',
-    title: 'Which art styles inspire you?',
+    title: 'Art Preference',
     description: 'Choose the visual expressions that move you',
     type: 'multiple_choice',
     options: [

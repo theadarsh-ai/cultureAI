@@ -6,6 +6,10 @@ CultureAI is a full-stack web application that discovers users' cultural prefere
 
 The application features a React-based frontend with sophisticated UI components, an Express.js backend with RESTful APIs, and integrates with external services including OpenAI for cultural analysis and Qloo for cultural data enrichment. Users complete interactive questionnaires to build their cultural profiles, which are then analyzed to generate insights and personalized recommendations.
 
+## Recent Changes
+
+**January 1, 2025**: Successfully resolved persistent emoji rendering issue in questionnaire form by implementing a clean, minimal design with colored circles instead of emojis/icons. This ensures consistent display across all browsers and devices without compatibility issues.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.

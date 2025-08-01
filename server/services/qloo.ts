@@ -60,34 +60,27 @@ class QlooService {
   }
 
   async search(query: string, categories?: string[]): Promise<QlooApiResponse> {
-    // Use the insights endpoint with proper filter.type
-    const params: Record<string, any> = {};
+    // Use the search endpoint to find entities first
+    const params: Record<string, any> = { q: query };
     
     if (categories && categories.length > 0) {
-      // Map common categories to proper URN format
-      const categoryMap: Record<string, string> = {
-        'music': 'urn:entity:artist',
-        'restaurants': 'urn:entity:place',
-        'food': 'urn:entity:place', 
-        'travel': 'urn:entity:destination',
-        'places': 'urn:entity:destination',
-        'movies': 'urn:entity:movie',
-        'tv': 'urn:entity:tv_show',
-        'books': 'urn:entity:book'
+      // Map categories to search types
+      const typeMap: Record<string, string> = {
+        'music': 'Artist',
+        'restaurants': 'Place',
+        'food': 'Place', 
+        'travel': 'Destination',
+        'places': 'Destination',
+        'movies': 'Movie',
+        'tv': 'TvShow',
+        'books': 'Book'
       };
       
-      const mappedCategory = categoryMap[categories[0]] || 'urn:entity:place';
-      params['filter.type'] = mappedCategory;
-    } else {
-      params['filter.type'] = 'urn:entity:place'; // Default to places
+      const searchType = typeMap[categories[0]] || 'Place';
+      params['types'] = searchType;
     }
     
-    // Add the query as a text signal if provided
-    if (query) {
-      params['signal.text'] = query;
-    }
-    
-    return this.makeRequest('v2/insights', params);
+    return this.makeRequest('search', params);
   }
 
   async getRecommendations(sample: string[], categories?: string[]): Promise<QlooApiResponse> {
@@ -123,6 +116,15 @@ class QlooService {
     return this.makeRequest('v2/insights', request);
   }
 
+  async getInsightsForEntities(entityIds: string[], filterType: string): Promise<QlooApiResponse> {
+    const params: Record<string, any> = {
+      'filter.type': filterType,
+      'signal.interests.entities': entityIds.slice(0, 10).join(',')
+    };
+    
+    return this.makeRequest('v2/insights', params);
+  }
+
   async getCulturalAffinities(preferences: Record<string, any>): Promise<any> {
     try {
       // Convert user preferences to Qloo queries
@@ -130,39 +132,62 @@ class QlooService {
       
       if (preferences.music && preferences.music.length > 0) {
         for (const genre of preferences.music.slice(0, 3)) {
-          const result = await this.search(genre, ['music']);
-          if (result.results && result.results.length > 0) {
-            searches.push({
-              category: 'music',
-              query: genre,
-              entities: result.results.slice(0, 5)
-            });
+          const searchResult = await this.search(genre, ['music']);
+          if (searchResult.results && searchResult.results.length > 0) {
+            // Get entity IDs from search results
+            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
+            
+            if (entityIds.length > 0) {
+              // Get insights using the entity IDs
+              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:artist');
+              
+              searches.push({
+                category: 'music',
+                query: genre,
+                entities: searchResult.results.slice(0, 5),
+                insights: insightsResult.results || []
+              });
+            }
           }
         }
       }
 
       if (preferences.food && preferences.food.length > 0) {
         for (const cuisine of preferences.food.slice(0, 3)) {
-          const result = await this.search(cuisine, ['restaurants', 'food']);
-          if (result.results && result.results.length > 0) {
-            searches.push({
-              category: 'food',
-              query: cuisine,
-              entities: result.results.slice(0, 5)
-            });
+          const searchResult = await this.search(cuisine, ['restaurants', 'food']);
+          if (searchResult.results && searchResult.results.length > 0) {
+            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
+            
+            if (entityIds.length > 0) {
+              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:place');
+              
+              searches.push({
+                category: 'food',
+                query: cuisine,
+                entities: searchResult.results.slice(0, 5),
+                insights: insightsResult.results || []
+              });
+            }
           }
         }
       }
 
       if (preferences.travel && preferences.travel.length > 0) {
         for (const destination of preferences.travel.slice(0, 3)) {
-          const result = await this.search(destination, ['travel', 'places']);
-          if (result.results && result.results.length > 0) {
-            searches.push({
-              category: 'travel',
-              query: destination,
-              entities: result.results.slice(0, 5)
-            });
+          const searchResult = await this.search(destination, ['travel', 'places']);
+          if (searchResult.results && searchResult.results.length > 0) {
+            const entityIds = searchResult.results.slice(0, 3).map((r: any) => r.qloo_id).filter(Boolean);
+            
+            if (entityIds.length > 0) {
+              const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:destination');
+              
+              searches.push({
+                category: 'travel',
+                query: destination,
+                entities: searchResult.results.slice(0, 5),
+                insights: insightsResult.results || []
+              });
+            }
           }
         }
       }

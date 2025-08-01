@@ -121,11 +121,13 @@ class QlooService {
             console.log(`Search result for ${genre}:`, searchResult);
             
             if (searchResult.results && searchResult.results.length > 0) {
-              // Get entity IDs from search results (filter for artists if possible)
+              // Get entity IDs from search results - use entity_id field
               const entityIds = searchResult.results
-                .filter((r: any) => r.qloo_id)
+                .filter((r: any) => r.entity_id)
                 .slice(0, 3)
-                .map((r: any) => r.qloo_id);
+                .map((r: any) => r.entity_id);
+              
+              console.log(`Extracted entity IDs for ${genre}:`, entityIds);
               
               if (entityIds.length > 0) {
                 console.log(`Using entity IDs for ${genre}:`, entityIds);
@@ -157,9 +159,11 @@ class QlooService {
             
             if (searchResult.results && searchResult.results.length > 0) {
               const entityIds = searchResult.results
-                .filter((r: any) => r.qloo_id)
+                .filter((r: any) => r.entity_id)
                 .slice(0, 3)
-                .map((r: any) => r.qloo_id);
+                .map((r: any) => r.entity_id);
+              
+              console.log(`Extracted entity IDs for ${cuisine}:`, entityIds);
               
               if (entityIds.length > 0) {
                 const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:place');
@@ -188,9 +192,11 @@ class QlooService {
             
             if (searchResult.results && searchResult.results.length > 0) {
               const entityIds = searchResult.results
-                .filter((r: any) => r.qloo_id)
+                .filter((r: any) => r.entity_id)
                 .slice(0, 3)
-                .map((r: any) => r.qloo_id);
+                .map((r: any) => r.entity_id);
+              
+              console.log(`Extracted entity IDs for ${destination}:`, entityIds);
               
               if (entityIds.length > 0) {
                 const insightsResult = await this.getInsightsForEntities(entityIds, 'urn:entity:destination');
